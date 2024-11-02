@@ -18,7 +18,7 @@ export const signup=async (req,res,next)=>{
     res.json({message:"user was created"});
    } catch(error)
    {
-     next(errorHandler(400,'Try another username this is already present'));
+     next(errorHandler(400,'Try another username this is already in Use'));
    }
    
  
