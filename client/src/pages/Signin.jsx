@@ -1,11 +1,13 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
+import { useDispatch,useSelector } from 'react-redux'
+import { signInSuccess,signInFailure,signInStart } from '../redux/user/userSlice'
 const Signin = () => {
   const [FormData,setFormData]=useState({});
-  const [errorMessage,seterrorMessage]=useState(null);
-  const [loading,setloading]=useState(false);
+  const dispatch=useDispatch();
   const navigate=useNavigate();
+  const {loading,error: errorMessage}=useSelector(state=>state.user);
   const handleChange=(e)=>{
      setFormData({...FormData,[e.target.id]:e.target.value.trim()});
   };
@@ -13,9 +15,10 @@ const Signin = () => {
    e.preventDefault();   //to prevent page from refreshing every time i submit
    if(!FormData.password||!FormData.email)
    {
-    return seterrorMessage("Please fill out all fields");
+      return dispatch(signInFailure('Please fill all the fields'));
    }
    try{
+    dispatch(signInStart());
     const res=await fetch('/api/auth/signin',{                                                     //proxy used in vite settings
       method:'POST',
       headers: {'Content-Type':'application/json'},
@@ -24,16 +27,14 @@ const Signin = () => {
     const data=await res.json();
     if(data.success==false)
     {
-      return seterrorMessage(data.message);
+           dispatch(signInFailure(data.message));
     }
-    setloading(false);
     if(res.ok)
-    {
+    {  dispatch(signInSuccess(data));
       navigate('/');
     }
    }catch(error){
-    seterrorMessage(error.message);
-    setloading(false);
+     dispatch(signInFailure(error.message));
    }
   };
 
