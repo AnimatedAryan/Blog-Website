@@ -9,6 +9,7 @@ import Projects from './pages/Projects'
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Footercom from './components/Footer';
+import PrivateRoute from './components/PrivateRoute';
 const App = () => {
   return (
     <div>
@@ -19,7 +20,9 @@ const App = () => {
         <Route path="/about" element={<About/>}/>
         <Route path="/sign-in" element={<Signin/>}/>
         <Route path="/sign-up" element={<Signup />}/>
+        <Route element={<PrivateRoute/>}>
         <Route path="/Dashboard" element={<Dashboard />}/>
+        </Route>
         <Route path="/Projects" element={<Projects />}/>
       </Routes>
        <Footercom />
