@@ -40,14 +40,14 @@ export const updateUser = async (req, res, next) => {
               email: req.body.email,
               profilePicture: req.body.profilePicture,
               password: req.body.password,
-            },
+            }
           },
-          { new: true }
-        );
-        const { password, ...rest } = updatedUser._doc;
-        res.status(200).json(rest);
-      } catch (error) {
-        next(error);
-      }
+            { new: true }
+          );
+          const { password, ...rest } = updatedUser._doc;
+          res.status(200).json(rest);
+        } catch (error) {
+          next(error);
+     }
     }
   };
