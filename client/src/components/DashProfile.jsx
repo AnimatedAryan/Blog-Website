@@ -8,6 +8,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signoutSuccess,
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -21,6 +22,21 @@ export default function DashProfile() {
   const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/user/signout', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   const handleDeleteUser = async () => {
     setShowModal(false);
@@ -107,7 +123,9 @@ export default function DashProfile() {
       <span onClick={() => setShowModal(true)} className='cursor-pointer'>
           Delete Account
         </span>
-        <span className='cursor-pointer'>Sign Out</span>
+        <span onClick={handleSignout} className='cursor-pointer'>
+          Sign Out
+        </span>
       </div>
       {updateUserSuccess && (
         <Alert color='success' className='mt-5'>
@@ -134,8 +152,8 @@ export default function DashProfile() {
         <Modal.Body>
           <div className='text-center'>
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete your account?
+            <h3 className='mb-5 text-lg text-blue-500 dark:text-gray-400'>
+              Are you sure you want to delete your existing Account?
             </h3>
             <div className='flex justify-center gap-4'>
               <Button color='failure' onClick={handleDeleteUser}>
