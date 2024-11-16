@@ -20,20 +20,22 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const form = new FormData();
-    form.append('title', formData.title);
-    form.append('category', formData.category);
-    form.append('content', formData.content);
-    if (formData.image) {
-      form.append('image', formData.image);
-    }
-
+  
+    const postData = {
+      title: formData.title,
+      category: formData.category,
+      content: formData.content,
+    };
+  
     try {
       const res = await fetch('/api/post/create', {
         method: 'POST',
-        body: form,
+        headers: {
+          'Content-Type': 'application/json',  // Set content type to JSON
+        },
+        body: JSON.stringify(postData), // Send form data as JSON
       });
+  
       const data = await res.json();
       if (!res.ok) {
         setPublishError(data.message || 'Failed to publish the post.');
@@ -44,7 +46,7 @@ export default function CreatePost() {
       setPublishError('Something went wrong while publishing the post.');
     }
   };
-
+  
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className='text-center text-3xl my-7 font-semibold'>Create a Post</h1>
@@ -65,7 +67,7 @@ export default function CreatePost() {
             }
           >
             <option value='uncategorized'>Select a category</option>
-            <option value='javascript'>JavaScript</option>
+            <option value='Basic'>Basic</option>
             <option value='reactjs'>React.js</option>
             <option value='nextjs'>Next.js</option>
           </Select>

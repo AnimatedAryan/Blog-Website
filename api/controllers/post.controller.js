@@ -1,29 +1,44 @@
 import Post from '../models/post.model.js';
 import { errorHandler } from '../utils/error.js';
 export const create = async (req, res, next) => {
-  if (!req.user.isAdmin) {
-    return next(errorHandler(403, 'You are not allowed to create a post'));
-  }
-  if (!req.body.title || !req.body.content) {
-    return next(errorHandler(400, 'Please provide all required fields'));
-  }
-  const slug = req.body.title
-    .split(' ')
-    .join('-')
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]/g, '');
-  const newPost = new Post({
-    ...req.body,
-    slug,
-    userId: req.user.id,
-  });
-  try {
-    const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
-  } catch (error) {
-    next(error);
-  }
-};
+    console.log("came here 1");
+  
+    // Check if the user is an admin
+    if (!req.user.isAdmin) {
+      return next(errorHandler(403, 'You are not allowed to create a post'));
+    }
+    console.log("came here 2");
+  
+    // Check for required fields (title and content)
+    if (!req.body.title || !req.body.content) {
+      console.log(req.body); // This will log the request body for debugging
+      return next(errorHandler(400, 'Please provide all required fields'));
+    }
+    console.log("came here 3");
+  
+    // Generate a slug from the title
+    const slug = req.body.title
+      .split(' ')
+      .join('-')
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9-]/g, '');
+  
+    // Create a new post object
+    const newPost = new Post({
+      ...req.body,  // Spread the title, content, and category
+      slug,
+      userId: req.user.id,  // Associate the post with the logged-in user
+    });
+  
+    try {
+      // Save the new post to the database
+      const savedPost = await newPost.save();
+      res.status(201).json(savedPost);  // Respond with the saved post
+    } catch (error) {
+      next(error);  // Catch and pass errors to the error handler
+    }
+  };
+  
 export const getposts = async (req, res, next) => {
     try {
       const startIndex = parseInt(req.query.startIndex) || 0;
