@@ -10,6 +10,13 @@ export default function CommentSection({ postId }) {
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
+  const handleEdit = async (comment, editedContent) => {
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id ? { ...c, content: editedContent } : c
+      )
+    );
+  };
   const handleLike = async (commentId) => {
     try {
       if (!currentUser) {
@@ -141,7 +148,7 @@ export default function CommentSection({ postId }) {
             </div>
           </div>
           {comments.map((comment) => (
-           <Comment key={comment._id} comment={comment} onLike={handleLike} />
+          <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEdit}/>
           ))}
         </>
       )}
