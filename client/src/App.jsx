@@ -10,6 +10,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Footercom from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
+import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
+import CreatePost from './pages/CreatePost';
 const App = () => {
   return (
     <div>
@@ -21,12 +23,15 @@ const App = () => {
         <Route path="/sign-in" element={<Signin/>}/>
         <Route path="/sign-up" element={<Signup />}/>
         <Route element={<PrivateRoute/>}>
-        <Route path="/Dashboard" element={<Dashboard />}/>
+        <Route path="/dashboard" element={<Dashboard />}/>
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
+        <Route path='/create-post' element={<CreatePost />} />
         </Route>
         <Route path="/Projects" element={<Projects />}/>
-      </Routes>
-       <Footercom />
-      </BrowserRouter>
+        </Routes>
+        <Footer />
+        </BrowserRouter>
       
     </div>
   )
