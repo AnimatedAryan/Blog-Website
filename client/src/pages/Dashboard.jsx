@@ -17,16 +17,20 @@ const Dashboard = () => {
   },[location.search]);
 
   return (
-    <div className='min-h-screen flex flex-col md:flex-row'>
-      <div className='md:w-56'>
-        {/* Sidebar */}
-        <DashSidebar />
-      </div>
-      {/* profile... */}
-      {tab === 'profile' && <DashProfile />}
-        {/* posts... */}
-        {tab === 'posts' && <DashPosts />}
-    </div>
+    <div className="min-h-screen flex flex-col md:flex-row">
+  <div className='md:w-56'>
+    {/* Sidebar */}
+    <DashSidebar />
+  </div>
+  
+  {/* Right section - make sure it takes remaining space */}
+  <div className="flex-grow">
+    {/* profile... */}
+    {tab === 'profile' && <DashProfile />}
+    {/* posts... */}
+    {tab === 'posts' && <DashPosts />}
+  </div>
+</div>
 );
 }
 
