@@ -67,9 +67,8 @@ export default function CreatePost() {
             }
           >
             <option value='uncategorized'>Select a category</option>
-            <option value='Basic'>Basic</option>
-            <option value='reactjs'>React.js</option>
-            <option value='nextjs'>Next.js</option>
+            <option value='LifeStyle'>LifeStyle</option>
+            <option value='Cooking'>Cooking</option>
           </Select>
         </div>
 
