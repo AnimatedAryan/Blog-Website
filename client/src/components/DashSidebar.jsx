@@ -1,27 +1,23 @@
 import { Sidebar } from 'flowbite-react';
-import { HiUser, HiArrowSmRight } from 'react-icons/hi';
+import { HiUser, HiArrowSmRight, HiDocumentText } from 'react-icons/hi';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function DashSidebar() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [tab, setTab] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
-
+  const { currentUser } = useSelector((state) => state.user);
+  const [tab, setTab] = useState('');
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const tabFromUrl = urlParams.get('tab')?.toLowerCase();
-    if (tabFromUrl && ['profile'].includes(tabFromUrl)) {
+    const tabFromUrl = urlParams.get('tab');
+    if (tabFromUrl) {
       setTab(tabFromUrl);
-    } else {
-      setTab('');
     }
   }, [location.search]);
-
   const handleSignout = async () => {
     try {
       const res = await fetch('/api/user/signout', {
@@ -29,32 +25,43 @@ export default function DashSidebar() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setErrorMessage(data.message || 'Sign out failed!');
+        console.log(data.message);
       } else {
         dispatch(signoutSuccess());
-        navigate('/sign-in'); // Redirect after signout
       }
     } catch (error) {
-      setErrorMessage(error.message || 'An error occurred!');
+      console.log(error.message);
     }
   };
-
   return (
-     <Sidebar className='w-full md:w-56'>
+    <Sidebar className='w-full md:w-56'>
       <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item
-            to="/dashboard?tab=profile"
-            active={tab === 'profile'}
-            icon={HiUser}
-            label={'User'}
-            labelColor="dark"
-          >
-            Profile
-          </Sidebar.Item>
+        <Sidebar.ItemGroup className='flex flex-col gap-1'>
+          <Link to='/dashboard?tab=profile'>
+            <Sidebar.Item
+              active={tab === 'profile'}
+              icon={HiUser}
+              label={currentUser.isAdmin ? 'Admin' : 'User'}
+              labelColor='dark'
+              as='div'
+            >
+              Profile
+            </Sidebar.Item>
+          </Link>
+          {currentUser.isAdmin && (
+            <Link to='/dashboard?tab=posts'>
+              <Sidebar.Item
+                active={tab === 'posts'}
+                icon={HiDocumentText}
+                as='div'
+              >
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
           <Sidebar.Item
             icon={HiArrowSmRight}
-            className="cursor-pointer"
+            className='cursor-pointer'
             onClick={handleSignout}
           >
             Sign Out
@@ -64,5 +71,3 @@ export default function DashSidebar() {
     </Sidebar>
   );
 }
-
-
