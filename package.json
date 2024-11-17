@@ -9,7 +9,12 @@
     "start": "node api/index.js",
     "build": "npm install --prefix client && npm run build --prefix client"
   },
-  "keywords": ["blog", "lifestyle", "motivation", "cooking"],
+  "keywords": [
+    "blog",
+    "lifestyle",
+    "motivation",
+    "cooking"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "dependencies": {

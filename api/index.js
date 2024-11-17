@@ -7,12 +7,14 @@ import authRoutes from './routes/auth.route.js';
 import commentRoutes from './routes/comment.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import { fileURLToPath } from 'url';  
 dotenv.config();
 mongoose.connect(process.env.MONGO)
 .then(()=>{
     console.log('Mongodb is connected')
 }).catch((err)=>{console.log(err)})
-const _dirname=path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app=express();
 app.listen(3000,()=>{
     console.log('server is runing');
