@@ -1,6 +1,5 @@
 import { Alert, Button, TextInput, Textarea,Modal } from 'flowbite-react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { set } from 'mongoose';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Comment from './Comment';
